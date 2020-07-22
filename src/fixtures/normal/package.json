@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "cordova:prepare": "umi cordova prepare",
+    "cordova:init": "umi cordova prepare init",
+    "cordova:browser:dev": "umi dev cordova browser",
+    "cordova:browser:build": "umi build cordova browser",
+    "cordova:android:dev": "umi build cordova android",
+    "cordova:android:build": "umi build cordova android",
+    "cordova:ios:dev": "umi dev cordova ios",
+    "cordova:ios:build": "umi build cordova ios"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "@byslin/umi-plugin-cordova",
+  "version": "0.0.1",
+  "description": "Umi plugin for cordova",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "cordova:prepare": "cross-env APP_ROOT=src/fixtures/normal umi cordova prepare",
+    "cordova:init": "cross-env APP_ROOT=src/fixtures/normal umi cordova init",
+    "cordova:browser:dev": "cross-env APP_ROOT=src/fixtures/normal umi dev cordova browser",
+    "cordova:browser:build": "cross-env APP_ROOT=src/fixtures/normal umi build cordova browser",
+    "cordova:android:dev": "cross-env APP_ROOT=src/fixtures/normal umi dev cordova android",
+    "cordova:android:build": "cross-env APP_ROOT=src/fixtures/normal umi build cordova android",
+    "cordova:ios:dev": "cross-env APP_ROOT=src/fixtures/normal umi dev cordova ios",
+    "cordova:ios:build": "cross-env APP_ROOT=src/fixtures/normal umi build cordova ios",
+    "build": "father-build"
+  },
+  "files": [
+    "lib",
+    "template"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BySlin/umi-plugin-cordova"
+  },
+  "keywords": [
+    "umi"
+  ],
+  "authors": [
+    "BySlin <by2292735470@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/BySlin/umi-plugin-cordova/issues",
+  "homepage": "https://github.com/BySlin/umi-plugin-cordova/tree/master#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
+    "cross-env": "^7.0.2",
+    "father-build": "^1.18.0",
+    "umi": "3.2.3",
+    "fs-extra": "^9.0.1"
+  },
+  "dependencies": {
+    "address": "^1.1.2"
+  }
+}
