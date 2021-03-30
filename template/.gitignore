@@ -1,4 +1,8 @@
 hooks/
 platforms/
 plugins/
-www/
+www/**
+package-lock.json
+yarn.lock
+node_modules/
+!**/.gitkeep
