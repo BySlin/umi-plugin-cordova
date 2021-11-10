@@ -161,7 +161,10 @@ export default function(api: IApi) {
           cordovaClean(srcCordovaPath);
           fse.writeFileSync(path.join(srcCordovaPath, 'www', '.gitkeep'), '');
           const releaseType = api.args._[2] != undefined ? api.args._[2] : 'release';
-          execa('cordova', ['build', cordovaType, `--${releaseType}`], { ...commonOpts, cwd: srcCordovaPath });
+          execa('cordova', ['build', cordovaType, `--${releaseType}`, ...api.args._.splice(2)], {
+            ...commonOpts,
+            cwd: srcCordovaPath,
+          });
         } else {
           fse.copySync(path.join(srcCordovaPath, 'www'), path.join(srcCordovaPath, 'platforms', cordovaType, 'www'), { overwrite: true });
         }
@@ -205,9 +208,9 @@ export default function(api: IApi) {
     const lines = cordovaConfig.split(/\r?\n/g).reverse();
     const regexContent = /\s+<content/;
     const contentIndex = lines.findIndex(line => line.match(regexContent));
-    const allowNavigation = `  <allow-navigation href="${url}" />`;
+    const allowNavigation = `  <allow-navigation href='${url}' />`;
     if (contentIndex >= 0) {
-      lines[contentIndex] = `  <content src="${url}" />`;
+      lines[contentIndex] = `  <content src='${url}' />`;
       if (url) {
         lines.splice(contentIndex, 0, allowNavigation);
       }
