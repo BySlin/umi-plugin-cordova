@@ -6,11 +6,11 @@ import * as address from 'address';
 const { execa } = utils;
 
 interface CordovaConfig {
-  src: string,
-  routerMode: 'hash' | 'memory'
+  src: string;
+  routerMode: 'hash' | 'memory';
 }
 
-export default function(api: IApi) {
+export default function (api: IApi) {
   let isUpdatePkg = false;
 
   if (api.pkg.scripts['cordova:init'] == null) {
@@ -102,7 +102,9 @@ export default function(api: IApi) {
         'platform_www',
       );
       if (req.path.includes('cordova') || req.path.includes('plugins')) {
-        return fse.readFileSync(path.join(cordovaJsPath, req.url.substring(1))).toString();
+        return fse
+          .readFileSync(path.join(cordovaJsPath, req.url.substring(1)))
+          .toString();
       }
       return html;
     });
@@ -130,18 +132,28 @@ export default function(api: IApi) {
       if (isFirstCompile) {
         const { src } = api.config.cordovaConfig as CordovaConfig;
         const srcCordovaPath = path.join(api.cwd, src);
-        const installPlatform = fse.pathExistsSync(path.join(srcCordovaPath, 'platforms', cordovaType));
+        const installPlatform = fse.pathExistsSync(
+          path.join(srcCordovaPath, 'platforms', cordovaType),
+        );
         if (!installPlatform) {
-          execa.sync('cordova', ['platform', 'add', cordovaType], { ...commonOpts, cwd: srcCordovaPath });
+          execa.sync('cordova', ['platform', 'add', cordovaType], {
+            ...commonOpts,
+            cwd: srcCordovaPath,
+          });
         }
         if (cordovaType !== 'browser') {
           setCordovaConfig(srcCordovaPath);
           cordovaClean(srcCordovaPath);
-          execa('cordova', ['run', cordovaType], { ...commonOpts, cwd: srcCordovaPath }).then(() => {
-            resetCordovaConfig(srcCordovaPath);
-          }).catch(() => {
-            resetCordovaConfig(srcCordovaPath);
-          });
+          execa('cordova', ['run', cordovaType], {
+            ...commonOpts,
+            cwd: srcCordovaPath,
+          })
+            .then(() => {
+              resetCordovaConfig(srcCordovaPath);
+            })
+            .catch(() => {
+              resetCordovaConfig(srcCordovaPath);
+            });
         }
       }
     });
@@ -152,21 +164,35 @@ export default function(api: IApi) {
         const { src } = api.config.cordovaConfig as CordovaConfig;
         const srcCordovaPath = path.join(api.cwd, src);
 
-        const installPlatform = fse.pathExistsSync(path.join(srcCordovaPath, 'platforms', cordovaType));
+        const installPlatform = fse.pathExistsSync(
+          path.join(srcCordovaPath, 'platforms', cordovaType),
+        );
         if (!installPlatform) {
-          execa.sync('cordova', ['platform', 'add', cordovaType], { ...commonOpts, cwd: srcCordovaPath });
+          execa.sync('cordova', ['platform', 'add', cordovaType], {
+            ...commonOpts,
+            cwd: srcCordovaPath,
+          });
         }
 
         if (cordovaType !== 'browser') {
           cordovaClean(srcCordovaPath);
           fse.writeFileSync(path.join(srcCordovaPath, 'www', '.gitkeep'), '');
-          const releaseType = api.args._[2] != undefined ? api.args._[2] : 'release';
-          execa('cordova', ['build', cordovaType, `--${releaseType}`, ...api.args._.splice(2)], {
-            ...commonOpts,
-            cwd: srcCordovaPath,
-          });
+          const releaseType =
+            api.args._[2] != undefined ? api.args._[2] : '--release';
+          execa(
+            'cordova',
+            ['build', cordovaType, releaseType, ...api.args._.splice(2)],
+            {
+              ...commonOpts,
+              cwd: srcCordovaPath,
+            },
+          );
         } else {
-          fse.copySync(path.join(srcCordovaPath, 'www'), path.join(srcCordovaPath, 'platforms', cordovaType, 'www'), { overwrite: true });
+          fse.copySync(
+            path.join(srcCordovaPath, 'www'),
+            path.join(srcCordovaPath, 'platforms', cordovaType, 'www'),
+            { overwrite: true },
+          );
         }
       }
     });
@@ -185,7 +211,10 @@ export default function(api: IApi) {
         fse.emptyDirSync(path.join(srcCordovaPath, 'www'));
         checkFileConfig();
       } else if (arg === 'prepare') {
-        execa.sync('cordova', ['prepare'], { ...commonOpts, cwd: srcCordovaPath });
+        execa.sync('cordova', ['prepare'], {
+          ...commonOpts,
+          cwd: srcCordovaPath,
+        });
       }
     },
   });
@@ -198,8 +227,12 @@ export default function(api: IApi) {
   }
 
   function setCordovaConfig(srcCordovaPath: string) {
-    const port = (api.config.devServer != false && api.config.devServer?.port) || '8000';
-    const protocol = (api.config.devServer != false && api.config.devServer?.https != undefined) ? 'https' : 'http';
+    const port =
+      (api.config.devServer != false && api.config.devServer?.port) || '8000';
+    const protocol =
+      api.config.devServer != false && api.config.devServer?.https != undefined
+        ? 'https'
+        : 'http';
     const url = `${protocol}://${address.ip()}:${port}`;
 
     const configXmlPath = path.join(srcCordovaPath, 'config.xml');
@@ -207,7 +240,7 @@ export default function(api: IApi) {
     cordovaConfigContent = cordovaConfig;
     const lines = cordovaConfig.split(/\r?\n/g).reverse();
     const regexContent = /\s+<content/;
-    const contentIndex = lines.findIndex(line => line.match(regexContent));
+    const contentIndex = lines.findIndex((line) => line.match(regexContent));
     const allowNavigation = `  <allow-navigation href='${url}' />`;
     if (contentIndex >= 0) {
       lines[contentIndex] = `  <content src='${url}' />`;
@@ -228,14 +261,9 @@ export default function(api: IApi) {
 
   function cordovaClean(srcCordovaPath: string) {
     // cordova clean
-    return execa.sync('cordova', [
-      'clean',
-      cordovaType,
-    ], {
+    return execa.sync('cordova', ['clean', cordovaType], {
       ...commonOpts,
       cwd: srcCordovaPath,
     });
   }
 }
-
-
