@@ -1,6 +1,6 @@
 {
   "name": "@byslin/umi-plugin-cordova",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Umi plugin for cordova",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -35,14 +35,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
+  "dependencies": {
+    "address": "^1.2.0",
     "@types/fs-extra": "^9.0.13",
     "cross-env": "^7.0.3",
-    "father-build": "^1.20.3",
-    "umi": "^3.5.20",
-    "fs-extra": "^10.0.0"
-  },
-  "dependencies": {
-    "address": "^1.1.2"
+    "father-build": "^1.22.1",
+    "umi": "^3.5.23",
+    "fs-extra": "^10.1.0"
   }
 }
